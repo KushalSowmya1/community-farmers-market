@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshLocal - Community Farmers Market</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🌱 FreshLocal</h1>
+                <p>Community Farmers Market</p>
+            </div>
+            <nav class="nav">
+                <div class="nav-links" id="navLinks">
+                    <a href="#home" class="nav-link active" data-section="home">Home</a>
+                    <a href="#products" class="nav-link" data-section="products">Products</a>
+                    <a href="#vendors" class="nav-link" data-section="vendors">Vendors</a>
+                    <a href="#chat" class="nav-link" data-section="chat">Community</a>
+                    <a href="#delivery" class="nav-link vendor-only" data-section="delivery" style="display: none;">Deliveries</a>
+                </div>
+                <div class="user-actions">
+                    <div class="cart-icon" id="cartIcon" style="display: none;">
+                        <span class="cart-count" id="cartCount">0</span>
+                        🛒
+                    </div>
+                    <button class="btn-primary" id="authBtn" onclick="showAuth()">Login / Register</button>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <span class="user-name" id="userName"></span>
+                        <button class="btn-secondary" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Home Section -->
+        <section id="homeSection" class="section active">
+            <div class="hero">
+                <div class="container">
+                    <h2>Fresh. Local. Community.</h2>
+                    <p>Connect with local farmers and discover the freshest produce in your neighborhood</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <h3 id="totalVendors">12</h3>
+                            <p>Local Vendors</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalProducts">85</h3>
+                            <p>Fresh Products</p>
+                        </div>
+                        <div class="stat">
+                            <h3 id="totalDeliveries">247</h3>
+                            <p>Deliveries Made</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🥕</div>
+                        <h3>Fresh Produce</h3>
+                        <p>Directly from local farms to your table</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚛</div>
+                        <h3>Fast Delivery</h3>
+                        <p>Same-day delivery available</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Community</h3>
+                        <p>Connect with neighbors and farmers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="productsSection" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Fresh Products</h2>
+                    <div class="filters">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="herbs">Herbs</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="Search products...">
+                    </div>
+                </div>
+                <div class="products-grid" id="productsGrid"></div>
+                
+                <!-- Add Product Form (Vendor Only) -->
+                <div class="add-product-form vendor-only" id="addProductForm" style="display: none;">
+                    <h3>Add New Product</h3>
+                    <form id="productForm">
+                        <input type="text" id="productName" placeholder="Product Name" required>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="herbs">Herbs</option>
+                            <option value="dairy">Dairy</option>
+                        </select>
+                        <input type="number" id="productPrice" placeholder="Price per unit" step="0.01" required>
+                        <input type="text" id="productUnit" placeholder="Unit (kg, piece, etc.)" required>
+                        <textarea id="productDescription" placeholder="Product Description"></textarea>
+                        <button type="submit" class="btn-primary">Add Product</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vendors Section -->
+        <section id="vendorsSection" class="section">
+            <div class="container">
+                <h2>Our Vendors</h2>
+                <div class="vendors-grid" id="vendorsGrid"></div>
+            </div>
+        </section>
+
+        <!-- Community Chat Section -->
+        <section id="chatSection" class="section">
+            <div class="container">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2>Community Chat</h2>
+                        <p>Connect with fellow farmers and buyers</p>
+                    </div>
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input" id="chatInputContainer" style="display: none;">
+                        <input type="text" id="messageInput" placeholder="Type your message...">
+                        <button onclick="sendMessage()" class="btn-primary">Send</button>
+                    </div>
+                    <div class="chat-login-prompt" id="chatLoginPrompt">
+                        <p>Please login to join the community chat</p>
+                        <button class="btn-primary" onclick="showAuth()">Login / Register</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Delivery Section (Vendor Only) -->
+        <section id="deliverySection" class="section">
+            <div class="container">
+                <h2>Delivery Management</h2>
+                <div class="delivery-stats">
+                    <div class="stat-card">
+                        <h3 id="pendingDeliveries">0</h3>
+                        <p>Pending Orders</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="completedDeliveries">0</h3>
+                        <p>Completed Today</p>
+                    </div>
+                </div>
+                <div class="orders-list" id="ordersList"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shopping Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Shopping Cart</h3>
+                <span class="close" onclick="closeCart()">&times;</span>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total">
+                <h4>Total: $<span id="cartTotal">0.00</span></h4>
+                <button class="btn-primary" onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="authTitle">Login</h3>
+                <span class="close" onclick="closeAuth()">&times;</span>
+            </div>
+            <form id="authForm">
+                <div class="form-group">
+                    <input type="text" id="authUsername" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="authEmail" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="authPassword" placeholder="Password" required>
+                </div>
+                <div class="form-group" id="roleGroup" style="display: none;">
+                    <select id="userRole" required>
+                        <option value="">Select Role</option>
+                        <option value="buyer">Buyer</option>
+                        <option value="vendor">Vendor</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" id="authSubmit">Login</button>
+                <p class="auth-switch">
+                    <span id="authSwitchText">Don't have an account?</span>
+                    <a href="#" id="authSwitchLink" onclick="toggleAuthMode()">Register</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
